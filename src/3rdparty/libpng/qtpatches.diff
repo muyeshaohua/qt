@@ -5,7 +5,7 @@ index 3f9493e..535c2df 100644
 @@ -196,7 +196,7 @@
  #    define PNGCAPI __watcall
  #  endif
- 
+
 -#  if defined(__GNUC__) || (defined(_MSC_VER) && (_MSC_VER >= 800))
 +#  if defined(__GNUC__) || (defined (_MSC_VER) && (_MSC_VER >= 800)) || defined(__WINSCW__)
  #    define PNGCAPI __cdecl
@@ -47,7 +47,7 @@ index 5980a3f..4031d73 100644
 @@ -23,6 +23,12 @@
  #ifndef PNGPRIV_H
  #define PNGPRIV_H
- 
+
 +#ifdef _MSC_VER
 +#  ifndef _CRT_SECURE_NO_DEPRECATE
 +#    define _CRT_SECURE_NO_DEPRECATE
@@ -60,7 +60,7 @@ index 5980a3f..4031d73 100644
 @@ -215,6 +221,11 @@
  #  endif
  #endif /* Setting PNG_BUILD_DLL if required */
- 
+
 +/* Modfied for usage in Qt: Do not export the libpng APIs */
 +#ifdef PNG_BUILD_DLL
 +#undef PNG_BUILD_DLL
@@ -70,7 +70,7 @@ index 5980a3f..4031d73 100644
   * the command line to the right thing for the specific compilation system or it
   * may be automagically set above (at present we know of no system where it does
 @@ -425,7 +436,9 @@
- 
+
  #if defined(WIN32) || defined(_Windows) || defined(_WINDOWS) || \
      defined(_WIN32) || defined(__WIN32__)
 -#  include <windows.h>  /* defines _WINDOWS_ macro */
@@ -79,9 +79,9 @@ index 5980a3f..4031d73 100644
 +#  endif
  #endif
  #endif /* PNG_VERSION_INFO_ONLY */
- 
+
 @@ -436,7 +449,7 @@
- 
+
  /* Memory model/platform independent fns */
  #ifndef PNG_ABORT
 -#  ifdef _WINDOWS_

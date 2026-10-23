@@ -20,15 +20,20 @@ SOURCES += \
     $$PWD/libjpeg/jcapistd.c \
     $$PWD/libjpeg/jcarith.c \
     $$PWD/libjpeg/jccoefct.c \
+    $$PWD/libjpeg/jccolext.c \
     $$PWD/libjpeg/jccolor.c \
     $$PWD/libjpeg/jcdctmgr.c \
+    $$PWD/libjpeg/jcdiffct.c \
     $$PWD/libjpeg/jchuff.c \
     $$PWD/libjpeg/jcinit.c \
+    $$PWD/libjpeg/jclhuff.c \
+    $$PWD/libjpeg/jclossls.c \
     $$PWD/libjpeg/jcmainct.c \
     $$PWD/libjpeg/jcmarker.c \
     $$PWD/libjpeg/jcmaster.c \
     $$PWD/libjpeg/jcomapi.c \
     $$PWD/libjpeg/jcparam.c \
+    $$PWD/libjpeg/jcphuff.c \
     $$PWD/libjpeg/jcprepct.c \
     $$PWD/libjpeg/jcsample.c \
     $$PWD/libjpeg/jctrans.c \
@@ -38,14 +43,22 @@ SOURCES += \
     $$PWD/libjpeg/jdatadst.c \
     $$PWD/libjpeg/jdatasrc.c \
     $$PWD/libjpeg/jdcoefct.c \
+    $$PWD/libjpeg/jdcol565.c \
+    $$PWD/libjpeg/jdcolext.c \
     $$PWD/libjpeg/jdcolor.c \
     $$PWD/libjpeg/jddctmgr.c \
+    $$PWD/libjpeg/jddiffct.c \
     $$PWD/libjpeg/jdhuff.c \
     $$PWD/libjpeg/jdinput.c \
+    $$PWD/libjpeg/jdlhuff.c \
+    $$PWD/libjpeg/jdlossls.c \
     $$PWD/libjpeg/jdmainct.c \
     $$PWD/libjpeg/jdmarker.c \
     $$PWD/libjpeg/jdmaster.c \
     $$PWD/libjpeg/jdmerge.c \
+    $$PWD/libjpeg/jdmrg565.c \
+    $$PWD/libjpeg/jdmrgext.c \
+    $$PWD/libjpeg/jdphuff.c \
     $$PWD/libjpeg/jdpostct.c \
     $$PWD/libjpeg/jdsample.c \
     $$PWD/libjpeg/jdtrans.c \
@@ -56,8 +69,11 @@ SOURCES += \
     $$PWD/libjpeg/jidctflt.c \
     $$PWD/libjpeg/jidctfst.c \
     $$PWD/libjpeg/jidctint.c \
+    $$PWD/libjpeg/jidctred.c \
+    $$PWD/libjpeg/jpeg_nbits.c \
     $$PWD/libjpeg/jquant1.c \
     $$PWD/libjpeg/jquant2.c \
+    $$PWD/libjpeg/jstdhuff.c \
     $$PWD/libjpeg/jutils.c \
     $$PWD/libjpeg/jmemmgr.c \
     $$PWD/libjpeg/jmemnobs.c

@@ -1,9 +1,14 @@
 /*
  * jcinit.c
  *
+ * This file was part of the Independent JPEG Group's software:
  * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
+ * Lossless JPEG Modifications:
+ * Copyright (C) 1999, Ken Murchison.
+ * libjpeg-turbo Modifications:
+ * Copyright (C) 2020, 2022, 2024, 2026, D. R. Commander.
+ * For conditions of distribution and use, see the accompanying README.ijg
+ * file.
  *
  * This file contains initialization logic for the JPEG compressor.
  * This routine is in charge of selecting the modules to be executed and
@@ -18,6 +23,7 @@
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
+#include "jpegapicomp.h"
 
 
 /*
@@ -27,35 +33,67 @@
  */
 
 GLOBAL(void)
-jinit_compress_master (j_compress_ptr cinfo)
+jinit_compress_master(j_compress_ptr cinfo)
 {
   /* Initialize master control (includes parameter checking/processing) */
   jinit_c_master_control(cinfo, FALSE /* full compression */);
 
   /* Preprocessing */
-  if (! cinfo->raw_data_in) {
-    jinit_color_converter(cinfo);
-    jinit_downsampler(cinfo);
-    jinit_c_prep_controller(cinfo, FALSE /* never need full buffer here */);
-  }
-  /* Forward DCT */
-  jinit_forward_dct(cinfo);
-  /* Entropy encoding: either Huffman or arithmetic coding. */
-  if (cinfo->arith_code)
-    jinit_arith_encoder(cinfo);
-  else {
-    jinit_huff_encoder(cinfo);
+  if (!cinfo->raw_data_in) {
+    if (cinfo->data_precision == 8) {
+      jinit_color_converter(cinfo);
+      jinit_downsampler(cinfo);
+      jinit_c_prep_controller(cinfo, FALSE /* never need full buffer here */);
+    } else {
+      ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+    }
   }
 
-  /* Need a full-image coefficient buffer in any multi-pass mode. */
-  jinit_c_coef_controller(cinfo,
-		(boolean) (cinfo->num_scans > 1 || cinfo->optimize_coding));
-  jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+  if (cinfo->master->lossless) {
+    ERREXIT(cinfo, JERR_NOT_COMPILED);
+  } else {
+#if defined(DCT_ISLOW_SUPPORTED) || defined(DCT_IFAST_SUPPORTED) || \
+    defined(DCT_FLOAT_SUPPORTED)
+    /* Forward DCT */
+    if (cinfo->data_precision == 8)
+      jinit_forward_dct(cinfo);
+    else
+      ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
+    /* Entropy encoding: either Huffman or arithmetic coding. */
+    if (cinfo->arith_code) {
+#ifdef C_ARITH_CODING_SUPPORTED
+      jinit_arith_encoder(cinfo);
+#else
+      ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
+#endif
+    } else {
+      if (cinfo->progressive_mode) {
+#ifdef C_PROGRESSIVE_SUPPORTED
+        jinit_phuff_encoder(cinfo);
+#else
+        ERREXIT(cinfo, JERR_NOT_COMPILED);
+#endif
+      } else
+        jinit_huff_encoder(cinfo);
+    }
+
+    /* Need a full-image coefficient buffer in any multi-pass mode. */
+    jinit_c_coef_controller(cinfo, (boolean)(cinfo->num_scans > 1 ||
+                                             cinfo->optimize_coding));
+#else
+    ERREXIT(cinfo, JERR_NOT_COMPILED);
+#endif
+  }
+
+  if (cinfo->data_precision == 8)
+    jinit_c_main_controller(cinfo, FALSE /* never need full buffer here */);
+  else
+    ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
 
   jinit_marker_writer(cinfo);
 
   /* We can now tell the memory manager to allocate virtual arrays. */
-  (*cinfo->mem->realize_virt_arrays) ((j_common_ptr) cinfo);
+  (*cinfo->mem->realize_virt_arrays) ((j_common_ptr)cinfo);
 
   /* Write the datastream header (SOI) immediately.
    * Frame and scan headers are postponed till later.

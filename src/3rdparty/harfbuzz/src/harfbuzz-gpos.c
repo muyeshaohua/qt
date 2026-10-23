@@ -3040,6 +3040,9 @@ static HB_Error  Lookup_MarkMarkPos( GPOS_Instance*    gpi,
     return ERR(HB_Err_Invalid_SubTable);
 
   m2r          = &ma2->Mark2Record[mark2_index];
+  // Security fix: CVE-2011-3193 - validate class index for Mark2Anchor array access
+  if ( class >= mmp->ClassCount || !m2r->Mark2Anchor )
+    return ERR(HB_Err_Invalid_SubTable);
   mark2_anchor = &m2r->Mark2Anchor[class];
 
   error = Get_Anchor( gpi, mark1_anchor, IN_CURGLYPH(),

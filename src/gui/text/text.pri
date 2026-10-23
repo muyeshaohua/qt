@@ -231,7 +231,8 @@ contains(QT_CONFIG, freetype) {
 
     INCLUDEPATH += \
 	../3rdparty/freetype/src \
-	../3rdparty/freetype/include
+	../3rdparty/freetype/include \
+	../3rdparty/zlib
 
     DEFINES += FT2_BUILD_LIBRARY FT_CONFIG_OPTION_SYSTEM_ZLIB
     
