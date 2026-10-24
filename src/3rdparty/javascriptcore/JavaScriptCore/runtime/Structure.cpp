@@ -156,9 +156,12 @@ Structure::Structure(JSValue prototype, const TypeInfo& typeInfo)
 Structure::~Structure()
 {
     if (m_previous) {
-        if (m_nameInPrevious)
-            m_previous->table.remove(StructureTransitionTableHash::Key(RefPtr<UString::Rep>(m_nameInPrevious.get()), m_attributesInPrevious), m_specificValueInPrevious);
-        else
+        if (m_nameInPrevious) {
+            // read bit-field into a local: std::pair's const-reference
+            // parameter cannot bind a bit-field
+            unsigned attributes = m_attributesInPrevious;
+            m_previous->table.remove(StructureTransitionTableHash::Key(RefPtr<UString::Rep>(m_nameInPrevious.get()), attributes), m_specificValueInPrevious);
+        } else
             m_previous->table.removeAnonymousSlotTransition(m_anonymousSlotsInPrevious);
 
     }
