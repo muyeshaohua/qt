@@ -48,9 +48,11 @@ QT_BEGIN_HEADER
 #  include <QtCore/qatomic_x86_64.h>
 #elif defined(__i386__)
 #  include <QtCore/qatomic_i386.h>
-#else // !__x86_64 && !__i386__
+#elif defined(__aarch64__)
+#  include <QtCore/qatomic_aarch64.h>
+#else // !__x86_64 && !__i386 && !__aarch64__
 #  include <QtCore/qatomic_powerpc.h>
-#endif // !__x86_64__ && !__i386__
+#endif
 
 QT_END_HEADER
 

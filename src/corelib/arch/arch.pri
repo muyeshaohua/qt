@@ -5,6 +5,7 @@ win32-g++*:HEADERS += arch/qatomic_i386.h \
                       arch/qatomic_x86_64.h
 
 mac:HEADERS += arch/qatomic_macosx.h \
+               arch/qatomic_aarch64.h \
                arch/qatomic_generic.h
 
 symbian:HEADERS +=  arch/qatomic_symbian.h \
