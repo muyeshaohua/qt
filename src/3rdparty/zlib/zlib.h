@@ -41,6 +41,9 @@
 extern "C" {
 #endif
 
+/* Local note: this tree is zlib 1.3.2 plus the upstream fix for
+   CVE-2026-85091 (gz_write stale input state heap overflow, commit
+   df84af25). The version stays 1.3.2 to match upstream versioning. */
 #define ZLIB_VERSION "1.3.2"
 #define ZLIB_VERNUM 0x1320
 #define ZLIB_VER_MAJOR 1

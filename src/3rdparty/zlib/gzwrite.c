@@ -242,8 +242,13 @@ local z_size_t gz_write(gz_statep state, voidpc buf, z_size_t len) {
             n -= state->strm.avail_in;
             state->x.pos += n;
             len -= n;
-            if (ret == -1)
+            if (ret == -1) {
+                /* reset input state to avoid a stale next_in/avail_in being
+                   used in a later call (CVE-2026-85091, fix df84af25) */
+                state->strm.avail_in = 0;
+                state->strm.next_in = state->in;
                 return state->again ? put - len : 0;
+            }
         } while (len);
     }
 
