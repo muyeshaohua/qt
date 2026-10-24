@@ -316,8 +316,12 @@ namespace JSC {
         Structure* existingTransition = singleTransition();
         TransitionTable* transitionTable = new TransitionTable;
         setTransitionTable(transitionTable);
-        if (existingTransition)
-            add(StructureTransitionTableHash::Key(RefPtr<UString::Rep>(existingTransition->m_nameInPrevious.get()), existingTransition->m_attributesInPrevious), existingTransition, existingTransition->m_specificValueInPrevious);
+              if (existingTransition) {
+            // read bit-field into a local before constructing the Key:
+            // std::pair's const-reference parameter cannot bind a bit-field
+            unsigned attributes = existingTransition->m_attributesInPrevious;
+            add(StructureTransitionTableHash::Key(RefPtr<UString::Rep>(existingTransition->m_nameInPrevious.get()), attributes), existingTransition, existingTransition->m_specificValueInPrevious);
+        }
     }
 } // namespace JSC
 
