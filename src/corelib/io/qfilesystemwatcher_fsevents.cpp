@@ -74,7 +74,7 @@ static bool operator==(const struct ::timespec &left, const struct ::timespec &r
             && left.tv_nsec == right.tv_nsec;
 }
 
-static bool operator==(const struct ::stat64 &left, const struct ::stat64 &right)
+static bool operator==(const struct ::stat &left, const struct ::stat &right)
 {
     return left.st_dev == right.st_dev
             && left.st_mode == right.st_mode
@@ -87,7 +87,7 @@ static bool operator==(const struct ::stat64 &left, const struct ::stat64 &right
             && left.st_flags == right.st_flags;
 }
 
-static bool operator!=(const struct ::stat64 &left, const struct ::stat64 &right)
+static bool operator!=(const struct ::stat &left, const struct ::stat &right)
 {
     return !(operator==(left, right));
 }
@@ -344,8 +344,8 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
     PathInfoList::iterator End = list.end();
     PathInfoList::iterator it = list.begin();
     while (it != End) {
-        struct ::stat64 newInfo;
-        if (::stat64(it->absolutePath, &newInfo) == 0) {
+        struct ::stat newInfo;
+        if (::stat(it->absolutePath, &newInfo) == 0) {
             if (emitSignals) {
                 if (newInfo != it->savedInfo) {
                     it->savedInfo = newInfo;
