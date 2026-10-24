@@ -125,7 +125,7 @@ QT_USE_NAMESPACE
 - (void)removeActionsFromAppMenu
 {
     for (NSMenuItem *item in [appMenu itemArray])
-        [item setTag:nil];
+        [item setTag:0]; // NSInteger param: nil is nullptr in modern SDKs, 0 preserves behavior
 }
 
 - (void)dealloc
