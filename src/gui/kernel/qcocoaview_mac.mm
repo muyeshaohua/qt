@@ -1352,7 +1352,7 @@ Qt::DropAction QDragManager::drag(QDrag *o)
     // Save supported actions:
     [theView setSupportedActions: qt_mac_mapDropActions(dragPrivate()->possible_actions)];
     QPoint pointInView = [theView qt_qwidget]->mapFromGlobal(dndParams->globalPoint);
-    NSPoint imageLoc = {pointInView.x() - hotspot.x(), pointInView.y() + pix.height() - hotspot.y()};
+    NSPoint imageLoc = { static_cast<CGFloat>(pointInView.x() - hotspot.x()), static_cast<CGFloat>(pointInView.y() + pix.height() - hotspot.y()) };
     NSSize mouseOffset = {0.0, 0.0};
     NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
     dragPrivate()->executed_action = Qt::ActionMask;
