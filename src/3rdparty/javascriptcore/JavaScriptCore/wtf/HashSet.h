@@ -222,7 +222,12 @@ namespace WTF {
     {
         typedef HashSetTranslatorAdapter<ValueType, ValueTraits, T, HashTranslator> Adapter;
         pair<typename HashTableType::iterator, bool> p = m_impl.template addPassingHashCode<T, T, Adapter>(value, value);
-	return pair<iterator, bool>(p.first, p.second);
+        // two-step construction like add(const ValueType&) above: newer libc++
+        // rejects implicit pair<HashTable::iterator,bool> -> pair<HashSet::iterator,bool>
+        // template conversion at return sites
+        typename HashSet<Value, HashFunctions, Traits>::iterator temp = p.first;
+        pair<typename HashSet<Value, HashFunctions, Traits>::iterator, bool> p2(temp, p.second);
+        return p2;
     }
 
     template<typename T, typename U, typename V>
