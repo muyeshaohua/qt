@@ -769,7 +769,7 @@ QMacMenuAction::~QMacMenuAction()
                    && menuItem != [getMenuLoader() quitMenuItem]) {
             [menuItem setHidden:YES];
         }
-        [menuItem setTag:nil];
+        [menuItem setTag:0]; // NSInteger param: nil is nullptr in modern SDKs, 0 preserves behavior
     }
     [menuItem release];
 #endif
