@@ -64,7 +64,10 @@ INCLUDEPATH += $$PWD/WebKit/qt/Api
 
 CONFIG -= warn_on
 *-g++*:QMAKE_CXXFLAGS += -Wall -Wreturn-type -fno-strict-aliasing -Wcast-align -Wchar-subscripts -Wformat-security -Wreturn-type -Wno-unused-parameter -Wno-sign-compare -Wno-switch -Wno-switch-enum -Wundef -Wmissing-noreturn -Winit-self
-
+# clang (Xcode 10+) makes C++11 narrowing a default error; the 2011-era JSC/
+# WebCore code uses many size_t->uint32_t brace initializers that trip it on
+# arm64 (size_t is 64-bit). Opt out, as done in mkspecs gcc-base-macx.conf.
+*-g++*:QMAKE_CXXFLAGS += -Wno-c++11-narrowing
 # Enable GNU compiler extensions to the ARM compiler for all Qt ports using RVCT
 symbian|*-armcc {
     RVCT_COMMON_CFLAGS = --gnu --diag_suppress 68,111,177,368,830,1293
