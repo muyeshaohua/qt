@@ -7539,6 +7539,7 @@ fi
 if [ "x$PLATFORM_MAC" = "xyes" ] && [ "$XPLATFORM_MINGW" != "yes" ] && [ "$XPLATFORM_SYMBIAN" != "yes" ]; then
     #On Mac we implicitly link against libz, so we
     #never use the 3rdparty stuff.
+    :
 fi
 if [ "$CFG_ZLIB" = "yes" ]; then
     QT_CONFIG="$QT_CONFIG zlib"
