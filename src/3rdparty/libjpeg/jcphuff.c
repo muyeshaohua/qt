@@ -30,7 +30,9 @@
 #endif
 #include <limits.h>
 
-#ifdef HAVE_INTRIN_H
+/* intrin.h is MSVC-only; clang's shim intrin.h fails on macOS.
+   Guard matches jconfigint.h's HAVE_BITSCANFORWARD* guards; MSVC build unchanged. */
+#if defined(_MSC_VER) && defined(HAVE_INTRIN_H)
 #include <intrin.h>
 #ifdef _MSC_VER
 #ifdef HAVE_BITSCANFORWARD64
