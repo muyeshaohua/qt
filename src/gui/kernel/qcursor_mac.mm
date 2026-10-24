@@ -319,7 +319,7 @@ void QCursor::setPos(int x, int y)
     pos.x = x;
     pos.y = y;
 
-    CGEventRef e = CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, 0);
+    CGEventRef e = CGEventCreateMouseEvent(0, kCGEventMouseMoved, pos, kCGMouseButtonLeft);
     CGEventPost(kCGHIDEventTap, e);
     CFRelease(e);
 #else
@@ -367,7 +367,7 @@ void QCursorData::initCursorFromBitmap()
     type = QCursorData::TYPE_ImageCursor;
     curs.cp.my_cursor = true;
     QPixmap bmCopy = QPixmap::fromImage(finalCursor);
-    NSPoint hotSpot = { hx, hy };
+    NSPoint hotSpot = { static_cast<CGFloat>(hx), static_cast<CGFloat>(hy) };
     nsimage = static_cast<NSImage*>(qt_mac_create_nsimage(bmCopy));
     curs.cp.nscursor = [[NSCursor alloc] initWithImage:nsimage hotSpot: hotSpot];
     [nsimage release];
@@ -377,7 +377,7 @@ void QCursorData::initCursorFromPixmap()
 {
     type = QCursorData::TYPE_ImageCursor;
     curs.cp.my_cursor = true;
-    NSPoint hotSpot = { hx, hy };
+    NSPoint hotSpot = { static_cast<CGFloat>(hx), static_cast<CGFloat>(hy) };
     NSImage *nsimage;
     nsimage = static_cast<NSImage *>(qt_mac_create_nsimage(pixmap));
     curs.cp.nscursor = [[NSCursor alloc] initWithImage:nsimage hotSpot: hotSpot];
