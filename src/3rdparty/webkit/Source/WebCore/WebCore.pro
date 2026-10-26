@@ -371,7 +371,6 @@ v8 {
         bindings/js/ScriptObject.cpp \
         bindings/js/ScriptProfile.cpp \
         bindings/js/ScriptValue.cpp \
-        bindings/js/SerializedScriptValue.cpp \
         bridge/IdentifierRep.cpp \
         bridge/NP_jsobject.cpp \
         bridge/c/CRuntimeObject.cpp \
