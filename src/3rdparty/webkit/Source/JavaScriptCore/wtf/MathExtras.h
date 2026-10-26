@@ -78,10 +78,10 @@ const float piOverFourFloat = static_cast<float>(M_PI_4);
 
 #if OS(DARWIN)
 
-// Work around a bug in the Mac OS X libc where ceil(-0.1) return +0.
-inline double wtf_ceil(double x) { return copysign(ceil(x), x); }
-
-#define ceil(x) wtf_ceil(x)
+// The wtf_ceil workaround for ceil(-0.1) returning +0 in old OS X libc was
+// removed: modern libc++ is correct, and the function-like macro rewrote
+// ceil() calls inside libc++'s own headers (__hash_table etc.), breaking
+// the build. No code referenced wtf_ceil directly.
 
 #endif
 
