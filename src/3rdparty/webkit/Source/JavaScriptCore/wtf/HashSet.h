@@ -97,7 +97,7 @@ namespace WTF {
         // HashTableIterator despite the existence of a const_iterator cast method on the latter class.
         pair<iterator, bool> iterator_const_cast(const pair<typename HashTableType::iterator, bool>& p)
         {
-            return make_pair(iterator(HashTableType::const_iterator(p.first)), p.second);
+            return make_pair(iterator(typename HashTableType::const_iterator(p.first)), p.second);
         }
 #endif
         HashTableType m_impl;
