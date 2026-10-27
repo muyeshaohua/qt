@@ -1593,14 +1593,16 @@ void QApplication::setStyle(QStyle *style)
         }
     }
 
+if (old) {
 #ifndef QT_NO_STYLE_STYLESHEET
     if (QStyleSheetStyle *oldProxy = qobject_cast<QStyleSheetStyle *>(old)) {
         oldProxy->deref();
     } else
-#endif
-    if (old && old->parent() == qApp) {
+#endif // QT_NO_STYLE_STYLESHEET
+    if (old->parent() == qApp) {
         delete old;
     }
+}
 
     if (QApplicationPrivate::focus_widget) {
         QFocusEvent in(QEvent::FocusIn, Qt::OtherFocusReason);
